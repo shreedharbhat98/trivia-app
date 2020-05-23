@@ -1,0 +1,103 @@
+@import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Lemon&family=Piedra&family=Playfair+Display&family=Vollkorn:wght@500&display=swap');
+.App {
+  text-align: center;
+  color:'#EC407A'
+}
+
+/*
+
+    font-family: 'Piedra', cursive;
+
+    font-family: 'Playfair Display', serif;
+
+    font-family: 'Vollkorn', serif; */
+body{
+  background-color: #90CAF9;
+}
+.container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* On mouse-over, add a grey background color */
+.container:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+/* When the radio button is checked, add a blue background */
+.container input:checked ~ .checkmark {
+  background-color: #2196F3;
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+.container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the indicator (dot/circle) */
+.container .checkmark:after {
+ 	top: 9px;
+	left: 9px;
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	background: white;
+}
+h1{
+  /* font-family: 'Abril Fatface', cursive;
+   */
+   font-family: 'Lemon', cursive;
+   font-size: 40px;
+   color: #1A237E;
+}
+h2{
+  font-family: 'Abril Fatface', cursive;
+  color:#303F9F;
+  font-size: 35px;
+}
+.startBtn{
+  margin:auto;
+  margin-top: 50px;
+  min-width: 200px;
+  height: 50px;
+  font-size: 30px;
+  font-family: 'Lemon', cursive;
+  border-radius: 15px;
+  background: black;
+  border: 4px solid teal;
+  color:#D4E157
+}
+.answer-box{
+  margin:auto;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  margin-left: 40%;
+  padding:10px;
+}
+.quiz-box{
+  border:2px solid #1A237E;
+  margin-top: 2px ;
+  border-radius: 10px;
+  max-width: 90%;
+  margin:auto;
+}
+.question{
+
+  font-weight: bold;
+  font-size: 20px;
+  border-bottom: 1px solid black;
+  padding:5px;
+  background-color: #B3E5FC;
+}
+.here-u-go{
+  margin-top: 150px;
+}
