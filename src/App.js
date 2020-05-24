@@ -30,15 +30,25 @@ class App extends Component {
   render() {
     if (this.state.isStart) {
       return (
+        <>
         <div className="App home">
-          <h1> Exited to play Trivia Quizzes ? </h1>
+          <h1 style={{background:"#673AB7", color:"whitesmoke"}}> Excited to play Trivia Quizzes ? </h1>
           <h2 className="here-u-go">
-            <img src="/289.gif"/>
+            <img src="/289.gif" alt=""/>
           </h2>
           <button className="startBtn" onClick={this.handleStart}>
             Start
           </button>
         </div>
+        <footer >
+          <div style={{marginTop:"0", textAlign:"center"}}>
+          <div style={{height:"50px", background:"#607D8B"}}>
+          <div style={{fontWeight:"bold", color:"white"}}>  Made in <img src= "/367.gif" alt=""/> with masai </div>
+          </div>
+
+          </div>
+        </footer>
+        </>
       );
     }
     else if(this.state.isAllTheBest){

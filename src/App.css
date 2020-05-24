@@ -4,45 +4,46 @@
   color:'#EC407A'
 }
 
-/*
-
-    font-family: 'Piedra', cursive;
-
-    font-family: 'Playfair Display', serif;
-
-    font-family: 'Vollkorn', serif; */
 body{
-  background-color: #90CAF9;
+  background-color: #8EC5FC;
+  background-image: linear-gradient(62deg, #8EC5FC 0%, #E0C3FC 100%);
+  display:flex;
+  flex-direction:column;
 }
+footer {
+  position: fixed;
+  left: 0;
+  bottom: 10px;
+  width: 100%;
+  text-align: center;
+}
+
+.btn-grad {
+  background-image: linear-gradient(to right, #314755 0%, #26a0da 51%, #314755 100%);
+  color:white;
+  font-size: 20px;
+}
+
+.btn-grad:hover {
+   background-position: right center;
+  }
+
 .container input {
   position: absolute;
   opacity: 0;
   cursor: pointer;
 }
 
-/* On mouse-over, add a grey background color */
-.container:hover input ~ .checkmark {
-  background-color: #ccc;
-}
-
-/* When the radio button is checked, add a blue background */
-.container input:checked ~ .checkmark {
-  background-color: #2196F3;
-}
-
-/* Create the indicator (the dot/circle - hidden when not checked) */
 .checkmark:after {
   content: "";
   position: absolute;
   display: none;
 }
 
-/* Show the indicator (dot/circle) when checked */
 .container input:checked ~ .checkmark:after {
   display: block;
 }
 
-/* Style the indicator (dot/circle) */
 .container .checkmark:after {
  	top: 9px;
 	left: 9px;
@@ -52,8 +53,6 @@ body{
 	background: white;
 }
 h1{
-  /* font-family: 'Abril Fatface', cursive;
-   */
    font-family: 'Lemon', cursive;
    font-size: 40px;
    color: #1A237E;
@@ -89,6 +88,8 @@ h2{
   border-radius: 10px;
   max-width: 90%;
   margin:auto;
+  background-image: radial-gradient( circle 979px at 1.5% 3%,  rgba(255,198,147,1) 0%, rgba(255,246,233,1) 100.2% );
+  
 }
 .question{
 
@@ -96,8 +97,11 @@ h2{
   font-size: 20px;
   border-bottom: 1px solid black;
   padding:5px;
-  background-color: #B3E5FC;
+  color: white;
+  background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(0,52,89,1) 0%, rgba(0,168,232,1) 90% );
 }
 .here-u-go{
   margin-top: 150px;
 }
+input[type='radio']
+{ transform: scale(2); }
