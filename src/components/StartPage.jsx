@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import styles from "./StartPage.module.css"
 import QuizPage from "./QuizPage";
 import axios from "axios";
+import CompareAnswer from "./CompareAnswer";
 
 export default class StartPage extends Component {
     constructor(props) {
@@ -15,8 +15,10 @@ export default class StartPage extends Component {
             type: "",
             questionArray: [],
             responseArray: [],
-            isShowanswer: false,
+            isShowScore: false,
             count: 0,
+            isCompare: false,
+            oops: false
         }
     }
 
@@ -52,11 +54,20 @@ export default class StartPage extends Component {
             url: "https://opentdb.com/api.php?amount=15&category=" + this.state.category + "&difficulty=" + this.state.difficulty + "&type=" + this.state.type
         })
             .then(res => {
-                this.setState({
-                    isLoading: false,
-                    questionArray: res.data.results,
-                    isStarted: true
-                })
+                if (res.data.results.length === 0) {
+                    this.setState({
+                        oops: true,
+                        isLoading: false,
+                        isStarted: true
+                    })
+                }
+                else {
+                    this.setState({
+                        isLoading: false,
+                        questionArray: res.data.results,
+                        isStarted: true
+                    })
+                }
             })
             .catch(err => console.log(err))
     }
@@ -66,7 +77,7 @@ export default class StartPage extends Component {
         let n = this.state.questionArray.length
         let start = 0, j = 0;
 
-        this.setState({ isShowanswer: true, isStarted: false })
+        this.setState({ isShowScore: true, isStarted: false })
 
         while (start < n && j < ans.length) {
             if (this.state.questionArray[start].type === "multiple") {
@@ -123,14 +134,25 @@ export default class StartPage extends Component {
             if (j === ans.length && start === n)
                 break;
         }
-        console.log(count)
         this.setState({
             count: count
         })
     }
     handleRestart = () => {
         this.setState({
-            isSelect: true
+            isSelect: true,
+            oops: false,
+            category: "",
+            difficulty: "",
+            type: "",
+        })
+    }
+    handleCompare = () => {
+        this.setState({
+            isCompare: true,
+            isStarted: false,
+            isSelect: false,
+            isShowScore: false,
         })
     }
     render() {
@@ -139,42 +161,51 @@ export default class StartPage extends Component {
                 <div>
                     <h1>Select Your Preferencs Below <i className="fa fa-hand-o-down" aria-hidden="true" style={{ marginLeft: 10 }}></i> </h1>
                     <form onSubmit={this.submitForm} style={{ marginTop: "200px" }}>
-                        <label style={{ fontSize: "30px", color: "black", fontWeight: "bold", padding: "10px" }}>Select Category :</label>
+                        <div className="preference">
+                            <div>
+                                <label style={{ fontSize: "30px", color: "black", fontWeight: "bold", padding: "10px" }}>Select Category :
                         <select value={this.state.value} onChange={this.handleCategory} style={{ height: "40px", padding: "5px" }}>
-                            <option style={{ padding: "15px", background: "#263238", color: "white", fontSize: "15px" }} value="">Any Category</option>
-                            <option style={{ padding: "15px", background: "#263238", color: "white", fontSize: "15px" }} value="9">General Knowledge</option>
-                            <option style={{ padding: "15px", background: "#263238", color: "white", fontSize: "15px" }} value="10">Entertainment : Books</option>
-                            <option style={{ padding: "15px", background: "#263238", color: "white", fontSize: "15px" }} value="11">Entertainment : Film</option>
-                            <option style={{ padding: "15px", background: "#263238", color: "white", fontSize: "15px" }} value="12">Entertainment : Music</option>
+                                        <option style={{ padding: "15px", background: "#263238", color: "white", fontSize: "15px" }} value="">Any Category</option>
+                                        <option style={{ padding: "15px", background: "#263238", color: "white", fontSize: "15px" }} value="9">General Knowledge</option>
+                                        <option style={{ padding: "15px", background: "#263238", color: "white", fontSize: "15px" }} value="10">Entertainment : Books</option>
+                                        <option style={{ padding: "15px", background: "#263238", color: "white", fontSize: "15px" }} value="11">Entertainment : Film</option>
+                                        <option style={{ padding: "15px", background: "#263238", color: "white", fontSize: "15px" }} value="12">Entertainment : Music</option>
                             console.log(this.state.isShowanswer)
      <option style={{ padding: "15px", background: "#263238", color: "white", fontSize: "15px" }} value="30">Science : Gadgets</option>
-                            <option style={{ padding: "15px", background: "#263238", color: "white", fontSize: "15px" }} value="20">Mythology</option>
-                            <option style={{ padding: "15px", background: "#263238", color: "white", fontSize: "15px" }} value="21">Sports</option>
-                            <option style={{ padding: "15px", background: "#263238", color: "white", fontSize: "15px" }} value="22">Geography</option>
-                            <option style={{ padding: "15px", background: "#263238", color: "white", fontSize: "15px" }} value="23">History</option>
-                            <option style={{ padding: "15px", background: "#263238", color: "white", fontSize: "15px" }} value="24">Politics</option>
-                            <option style={{ padding: "15px", background: "#263238", color: "white", fontSize: "15px" }} value="25">Art</option>
-                            <option style={{ padding: "15px", background: "#263238", color: "white", fontSize: "15px" }} value="26">Celebrities</option>
-                            <option style={{ padding: "15px", background: "#263238", color: "white", fontSize: "15px" }} value="27">Animals</option>
-                            <option style={{ padding: "15px", background: "#263238", color: "white", fontSize: "15px" }} value="28">Vehicles</option>
-                        </select>
-                        <label style={{ fontSize: "30px", color: "black", fontWeight: "bold", padding: "10px" }} >
-                            Select Difficulty :
+                                        <option style={{ padding: "15px", background: "#263238", color: "white", fontSize: "15px" }} value="20">Mythology</option>
+                                        <option style={{ padding: "15px", background: "#263238", color: "white", fontSize: "15px" }} value="21">Sports</option>
+                                        <option style={{ padding: "15px", background: "#263238", color: "white", fontSize: "15px" }} value="22">Geography</option>
+                                        <option style={{ padding: "15px", background: "#263238", color: "white", fontSize: "15px" }} value="23">History</option>
+                                        <option style={{ padding: "15px", background: "#263238", color: "white", fontSize: "15px" }} value="24">Politics</option>
+                                        <option style={{ padding: "15px", background: "#263238", color: "white", fontSize: "15px" }} value="25">Art</option>
+                                        <option style={{ padding: "15px", background: "#263238", color: "white", fontSize: "15px" }} value="26">Celebrities</option>
+                                        <option style={{ padding: "15px", background: "#263238", color: "white", fontSize: "15px" }} value="27">Animals</option>
+                                        <option style={{ padding: "15px", background: "#263238", color: "white", fontSize: "15px" }} value="28">Vehicles</option>
+                                    </select>
+                                </label>
+                            </div>
+                            <div>
+                                <label style={{ fontSize: "30px", color: "black", fontWeight: "bold", padding: "10px" }} >
+                                    Select Difficulty :
                             <select style={{ height: "40px", padding: "5px" }} value={this.state.value} onChange={this.handleDifficulty}>
-                                <option style={{ padding: "15px", background: "#263238", color: "white", fontSize: "15px" }} value="">Any Difficulty</option>
-                                <option style={{ padding: "15px", background: "#263238", color: "white", fontSize: "15px" }} value="easy">Easy</option>
-                                <option style={{ padding: "15px", background: "#263238", color: "white", fontSize: "15px" }} value="medium">Medium</option>
-                                <option style={{ padding: "15px", background: "#263238", color: "white", fontSize: "15px" }} value="hard">Hard</option>
-                            </select>
-                        </label>
-                        <label style={{ fontSize: "30px", color: "black", fontWeight: "bold", padding: "10px" }} >
-                            Select Type :
+                                        <option style={{ padding: "15px", background: "#263238", color: "white", fontSize: "15px" }} value="">Any Difficulty</option>
+                                        <option style={{ padding: "15px", background: "#263238", color: "white", fontSize: "15px" }} value="easy">Easy</option>
+                                        <option style={{ padding: "15px", background: "#263238", color: "white", fontSize: "15px" }} value="medium">Medium</option>
+                                        <option style={{ padding: "15px", background: "#263238", color: "white", fontSize: "15px" }} value="hard">Hard</option>
+                                    </select>
+                                </label>
+                            </div>
+                            <div>
+                                <label style={{ fontSize: "30px", color: "black", fontWeight: "bold", padding: "10px" }} >
+                                    Select Type :
                             <select style={{ height: "40px", padding: "5px" }} value={this.state.value} onChange={this.handleType}>
-                                <option style={{ padding: "15px", background: "#263238", color: "white", fontSize: "15px" }} value="">Any Type</option>
-                                <option style={{ padding: "15px", background: "#263238", color: "white", fontSize: "15px" }} value="multiple">Multiple Choices</option>
-                                <option style={{ padding: "15px", background: "#263238", color: "white", fontSize: "15px" }} value="boolean">True / False</option>
-                            </select>
-                        </label>
+                                        <option style={{ padding: "15px", background: "#263238", color: "white", fontSize: "15px" }} value="">Any Type</option>
+                                        <option style={{ padding: "15px", background: "#263238", color: "white", fontSize: "15px" }} value="multiple">Multiple Choices</option>
+                                        <option style={{ padding: "15px", background: "#263238", color: "white", fontSize: "15px" }} value="boolean">True / False</option>
+                                    </select>
+                                </label>
+                            </div>
+                        </div>
                         <br />
                         <button type="submit" className="startBtn">START</button>
                     </form>
@@ -189,32 +220,56 @@ export default class StartPage extends Component {
             )
         }
         if (this.state.isStarted) {
-            return (
-                <div>
-                    <h2>Keep Calm and Answer !!!</h2>
+            if (this.state.oops) {
+                return (
                     <div>
-                        {this.state.questionArray.map((quiz, index) =>
-                            <QuizPage data={quiz} index={index} />
-                        )}
-                        <div style={{ textAlign: "left", margin: "20px", marginLeft: "38%" }}>
-                            <button style={{ padding: "10px", width: "150px", fontWeight: "bold", borderRadius: "10px" }} className="btn-grad" onClick={this.submitAnswers}>SUMBIT</button>
-                            <button style={{ padding: "10px", width: "150px", fontWeight: "bold", borderRadius: "10px", marginLeft: "10px" }} className="btn-grad" onClick={() => window.location.reload(true)}>BACK</button>
+                        <h1 style={{ color: "Red" }}>Oops..! No quiz available for your preference</h1>
+                        <button style={{ marginTop: "10px", padding: "10px", width: "150px", fontWeight: "bold", borderRadius: "15px" }} className="btn-grad" onClick={this.handleRestart}>RESTART</button>
+                        <button style={{ marginTop: "10px", padding: "10px", width: "150px", fontWeight: "bold", borderRadius: "15px", marginLeft: "10px" }} className="btn-grad" onClick={() => window.location.reload(true)}>HOME</button>
+                    </div>
+                )
+            }
+            if (!this.state.oops) {
+                return (
+                    <div>
+                        <h2>Keep Calm and Answer !!!</h2>
+                        <div>
+                            {this.state.questionArray.map((quiz, index) =>
+                                <QuizPage data={quiz} index={index} />
+                            )}
+                            <div style={{ textAlign: "left", margin: "20px", marginLeft: "38%" }}>
+                                <button style={{ padding: "10px", width: "150px", fontWeight: "bold", borderRadius: "10px" }} className="btn-grad" onClick={this.submitAnswers}>SUMBIT</button>
+                                <button style={{ padding: "10px", width: "150px", fontWeight: "bold", borderRadius: "10px", marginLeft: "10px" }} className="btn-grad" onClick={() => window.location.reload(true)}>BACK</button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            )
+                )
+            }
         }
-        if (this.state.isShowanswer) {
+        if (this.state.isShowScore) {
             return (
                 <div>
                     <div style={{ width: "500px", height: "400px", background: "#9575CD", margin: "auto", marginTop: "5%", borderRadius: "35px" }}>
                         <div style={{ padding: "30px" }}> <img src="/299.gif" alt="" width="400px" /> </div>
                         <div style={{ paddingTop: "50px", color: "whitesmoke", fontSize: "50px", fontWeight: "bold" }}> {this.state.count} / 15 </div>
-                        <div style={{ display: "flex", marginTop: "5%", marginLeft: "13%", flex: "1" }}>
-                            <button style={{ marginTop: "50px", padding: "10px", width: "150px", fontWeight: "bold", borderRadius: "10px", marginLeft: "20px" }} className="btn-grad" onClick={this.handleRestart}>RESTART</button>
-                            <button style={{ marginTop: "50px", padding: "10px", width: "150px", fontWeight: "bold", borderRadius: "10px", marginLeft: "20px" }} className="btn-grad" onClick={() => window.location.reload(true)}>HOME</button>
+
+                        <button style={{ marginTop: "5%", padding: "10px", width: "260px", fontWeight: "bold", borderRadius: "10px", marginLeft: "15px" }} className="btn-grad" onClick={this.handleCompare}>COMPARE ANSWERS</button>
+
+                        <div style={{ display: "flex", marginTop: "10px", marginLeft: "13%", flex: "1" }}>
+                            <button style={{ marginTop: "10px", padding: "10px", width: "150px", fontWeight: "bold", borderRadius: "10px", marginLeft: "20px" }} className="btn-grad" onClick={this.handleRestart}>RESTART</button>
+                            <button style={{ marginTop: "10px", padding: "10px", width: "150px", fontWeight: "bold", borderRadius: "10px", marginLeft: "20px" }} className="btn-grad" onClick={() => window.location.reload(true)}>HOME</button>
                         </div>
                     </div>
+                </div>
+            )
+        }
+        if (this.state.isCompare) {
+            return (
+                <div>
+                    <CompareAnswer data={this.state.questionArray} answers={this.state.responseArray} />
+                    <button style={{ marginTop: "10px", padding: "10px", width: "150px", fontWeight: "bold", borderRadius: "15px" }} className="btn-grad" onClick={this.handleRestart}>RESTART</button>
+
+                    <button style={{ marginTop: "10px", padding: "10px", width: "150px", fontWeight: "bold", borderRadius: "15px", marginLeft: "10px", }} className="btn-grad" onClick={() => window.location.reload(true)}>HOME</button>
                 </div>
             )
         }
